@@ -1,7 +1,7 @@
 /**
  * In this challenge, you have to regroup messages into an array of day based on their
  * sentAt property.
- * You have to manipulate dates in vanillaJS. Be carefull to call, if needed, setUTCHours, setUTCMinutes, ... 
+ * You have to manipulate dates in vanillaJS. Be carefull to call, if needed, setUTCHours, setUTCMinutes, ...
  * instead of setHouts, setMinutes, ... to avoid timezone offsets!
  *
  * Example:
@@ -21,26 +21,54 @@
  *          ]
  *      },
  * ]
- * 
+ *
  * @param messages List of messages, unsorted and not grouped in days
  * @returns Sorted list of days (only days with messages!) with a list of sorted messages of the day
  */
 
 // ↓ uncomment bellow lines and add your response!
-/*
 export default function ({ messages }: { messages: Message[] }): DayMessages[] {
-    return [];
+  let result: DayMessages[] = [];
+  messages
+    .sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime())
+    .forEach((message) => {
+      let date = new Date(message.sentAt);
+      const dayResult: DayMessages = {
+        day: new Date(date.setUTCHours(0, 0, 0, 0)).toISOString(),
+        messages: messages.filter((message) => {
+          return (
+            new Date(
+              new Date(message.sentAt).setUTCHours(0, 0, 0, 0)
+            ).toString() === new Date(date.setUTCHours(0, 0, 0, 0)).toString()
+          );
+        }),
+      };
+      result = [...result, dayResult];
+    });
+
+  const soluce: DayMessages[] = [];
+
+  //Remove duplicates items
+  for (const item of result) {
+    if (
+      !soluce.find((currentItem: DayMessages) => {
+        return currentItem.day === item.day;
+      })
+    ) {
+      soluce.push(item);
+    }
+  }
+  return soluce;
 }
-*/
 
 // used interfaces, do not touch
 export interface Message {
-    author: string;
-    sentAt: string;
-    message: string;
+  author: string;
+  sentAt: string;
+  message: string;
 }
 
 export interface DayMessages {
-    day: string;
-    messages: Message[];
+  day: string;
+  messages: Message[];
 }

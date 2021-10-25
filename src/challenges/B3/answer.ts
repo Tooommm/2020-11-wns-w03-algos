@@ -13,6 +13,16 @@ import { group } from "console";
 
 // ↓ uncomment bellow lines and add your response!
 
+const commonSkills = (array1, array2) => {
+  const filteredArray = array1.filter((value) => array2.includes(value));
+  return filteredArray.length;
+};
+
+const closestGroup = (groups, name) => {
+  const newGroups = groups.filter((group) => name != group.name);
+  return newGroups.sort((a, b) => commonSkills(a.skills, b.skills))[0];
+};
+
 export default function ({
   groups,
 }: {
@@ -21,9 +31,7 @@ export default function ({
   return groups.map((group) => {
     return {
       ...group,
-      closestGroups: groups.reduce((acc, currentValue) => {
-        return [];
-      }, []),
+      closestGroups: closestGroup(groups, group.name),
     };
   });
 }

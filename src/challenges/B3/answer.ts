@@ -17,18 +17,18 @@ const commonSkills = (array1, array2) => {
   return filteredArray.length;
 };
 
-const closestGroup = (groups, theGroup) => {
-  const newGroups = groups.filter((group) => theGroup.name != group.name);
+const closestGroup = (groups, groupToCompare) => {
+  const newGroups = groups.filter((group) => groupToCompare.name != group.name);
   let count = 0;
   return newGroups
     .map((value) => {
-      if (commonSkills(theGroup.skills, value.skills) > count) {
-        count = commonSkills(theGroup.skills, value.skills);
+      if (commonSkills(groupToCompare.skills, value.skills) > count) {
+        count = commonSkills(groupToCompare.skills, value.skills);
       }
       return value;
     })
     .filter((value) => {
-      return commonSkills(theGroup.skills, value.skills) >= count;
+      return commonSkills(groupToCompare.skills, value.skills) >= count;
     });
 };
 

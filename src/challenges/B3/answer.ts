@@ -1,4 +1,3 @@
-//@ts-nocheck
 /**
  * In this challenge, you must find and attach to each group the group (or groups)
  * with which the current group has the most skills in common.
@@ -18,9 +17,19 @@ const commonSkills = (array1, array2) => {
   return filteredArray.length;
 };
 
-const closestGroup = (groups, name) => {
-  const newGroups = groups.filter((group) => name != group.name);
-  return newGroups.sort((a, b) => commonSkills(a.skills, b.skills))[0];
+const closestGroup = (groups, theGroup) => {
+  const newGroups = groups.filter((group) => theGroup.name != group.name);
+  let count = 0;
+  return newGroups
+    .map((value) => {
+      if (commonSkills(theGroup.skills, value.skills) > count) {
+        count = commonSkills(theGroup.skills, value.skills);
+      }
+      return value;
+    })
+    .filter((value) => {
+      return commonSkills(theGroup.skills, value.skills) >= count;
+    });
 };
 
 export default function ({
@@ -31,7 +40,7 @@ export default function ({
   return groups.map((group) => {
     return {
       ...group,
-      closestGroups: closestGroup(groups, group.name),
+      closestGroups: closestGroup(groups, group),
     };
   });
 }
